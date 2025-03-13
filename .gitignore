@@ -2,3 +2,4 @@ tensorflow/
 __pycache__
 .vscode/
 test_data/
+db.sqlite3
