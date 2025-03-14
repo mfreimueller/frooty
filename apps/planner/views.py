@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .services import get_all_meals, plan_meals
+from .services import add_meals, get_all_meals, plan_meals
 
 """
 The API endpoint that predicts the next seven meals
@@ -21,7 +21,16 @@ treated as the latest elements.
 """
 @api_view(["POST"])
 def create(request):
-    pass
+    data = request.data
+    meals = data['meals']
+
+    try:
+        created_meals = add_meals(meals)
+    except:
+        # at this point, either the database was locked or a meal wasn't found
+        return Response({ 'error': 'Invalid request.' }, status=400)
+
+    return Response({ 'meals': created_meals })
 
 """
 An API endpoint that updates the previous n-meal entries
