@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .services import add_meals, delete_meal, get_all_meals, update_meal
+from .services import add_meal, delete_meal, get_all_meals, update_meal
 
 class MealListCreateView(APIView):
     """
@@ -16,22 +16,20 @@ class MealListCreateView(APIView):
     """
     POST /api/meals
 
-    An API endpoint that creates new meal entries in
+    An API endpoint that creates a new meal entry in
     the internal data storage to use for further predictions.
-    The meal entries are appended to the storage and are
-    treated as the latest elements.
     """
     def post(self, request):
         data = request.data
-        meals = data['meals']
+        meals = data['meal']
 
         try:
-            created_meals = add_meals(meals)
+            created_meal = add_meal(meals)
         except Exception as e:
             # at this point, either the database was locked or a meal wasn't found
             return Response({ 'error': e }, status=400)
 
-        return Response({ 'meals': created_meals })
+        return Response({ 'meal': created_meal })
 
 class MealUpdateDeleteView(APIView):
     """

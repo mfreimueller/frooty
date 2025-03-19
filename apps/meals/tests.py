@@ -1,14 +1,16 @@
 from django.test import TestCase
 from .models import Meal
-from .services import add_meals, delete_meal, get_all_meals, update_meal
+from .services import add_meal, delete_meal, get_all_meals, update_meal
+
+# TODO: Add test cases for duplicated names.
 
 class MealServiceTestCase(TestCase):
     def setUp(self):
         self.meals = [
-            Meal.objects.create(meal="Brotjause", complexity=1),
-            Meal.objects.create(meal="Sushi", complexity=6),
-            Meal.objects.create(meal="Leberkässemmel", complexity=2),
-            Meal.objects.create(meal="Fisch", complexity=4)
+            Meal.objects.create(name="Brotjause", complexity=1),
+            Meal.objects.create(name="Sushi", complexity=6),
+            Meal.objects.create(name="Leberkässemmel", complexity=2),
+            Meal.objects.create(name="Fisch", complexity=4)
         ]
 
     """
@@ -24,11 +26,9 @@ class MealServiceTestCase(TestCase):
 
         return super().tearDown()
 
-    def test_add_meals(self):
-        meals = add_meals(["Brotjause", "Sushi"])
-        self.assertEqual(len(meals), 2)
-        self.assertEqual(meals[0]['meal'], "Brotjause")
-        self.assertEqual(meals[1]['meal'], "Sushi")
+    def test_add_meal(self):
+        meal = add_meal({ "name": "Toast", "complexity": 2 })
+        self.assertEqual(meal['name'], "Toast")
 
     def test_get_all_meals(self):
         meals = get_all_meals()
@@ -41,9 +41,9 @@ class MealServiceTestCase(TestCase):
     def test_delete_existing_meal(self):
         # we don't test add_meals here, we assume that it's working,
         # as we already covered this above
-        meals = add_meals([ "Brotjause" ])
+        meal = add_meal({ "name": "Toast", "complexity": 2 })
 
-        meal_id = meals[0]['id']
+        meal_id = meal['id']
 
         try:
             delete_meal(meal_id)
@@ -67,16 +67,16 @@ class MealServiceTestCase(TestCase):
     def test_update_existing_meal(self):
         # we don't test add_meals here, we assume that it's working,
         # as we already covered this above
-        meals = add_meals([ "Brotjause" ])
+        meal = add_meal({ "name": "Toast", "complexity": 2 })
 
-        meal_id = meals[0]['id']
+        meal_id = meal['id']
         
         try:
-            update_meal(meal_id, 'Sushi')
+            update_meal(meal_id, { 'name': 'Veganer Burger' })
         except Exception as e:
             self.fail(f"update_meal() raised an exception: {e}")
 
-        self.assertEqual(Meal.objects.filter(id=meal_id).first().meal, 'Sushi')
+        self.assertEqual(Meal.objects.filter(id=meal_id).first().name, 'Veganer Burger')
 
     """
     This test makes sure that attempting to update a non existing meal

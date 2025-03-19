@@ -2,7 +2,7 @@ from django.db import models
 from rest_framework import serializers
 
 class Meal(models.Model):
-    meal = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     complexity = models.PositiveSmallIntegerField()
     soup  = models.PositiveSmallIntegerField(default=0)
     takeaway = models.PositiveSmallIntegerField(default=0)
@@ -47,12 +47,58 @@ class Meal(models.Model):
     cabbage = models.PositiveSmallIntegerField(default=0)
     tomatoes = models.PositiveSmallIntegerField(default=0)
 
-class MealSerialize(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField()
+    def update(self, *args, **kwargs):
+        for name,values in kwargs.items():
+            try:
+                setattr(self,name,values)
+            except KeyError:
+                pass
 
-    class Meta:
-        model = Meal
-        fields = ['id', 'name']
-    
-    def get_name(self, obj):
-        return obj.meal
+        self.save()
+
+class MealSerialize(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField(max_length=200)
+    complexity = serializers.IntegerField()
+    soup  = serializers.IntegerField()
+    takeaway = serializers.IntegerField()
+    sweet = serializers.IntegerField()
+    meat = serializers.IntegerField()
+    cold = serializers.IntegerField()
+    remains = serializers.IntegerField()
+    fish = serializers.IntegerField()
+    salad = serializers.IntegerField()
+    fast = serializers.IntegerField()
+    vegetarian = serializers.IntegerField()
+    meatloaf = serializers.IntegerField()
+    noodles = serializers.IntegerField()
+    mushrooms = serializers.IntegerField()
+    broccoli = serializers.IntegerField()
+    shrimps = serializers.IntegerField()
+    zucchini = serializers.IntegerField()
+    ham = serializers.IntegerField()
+    rice = serializers.IntegerField()
+    pizza = serializers.IntegerField()
+    fruits = serializers.IntegerField()
+    gnocci = serializers.IntegerField()
+    spinach = serializers.IntegerField()
+    beans = serializers.IntegerField()
+    sugar = serializers.IntegerField()
+    apples = serializers.IntegerField()
+    cauliflower = serializers.IntegerField()
+    feta = serializers.IntegerField()
+    chicken = serializers.IntegerField()
+    eggs = serializers.IntegerField()
+    tuna = serializers.IntegerField()
+    curd_cheese = serializers.IntegerField()
+    lentils = serializers.IntegerField()
+    cheese = serializers.IntegerField()
+    yeast = serializers.IntegerField()
+    sweet_potatoes = serializers.IntegerField()
+    sausage = serializers.IntegerField()
+    gorgonzola = serializers.IntegerField()
+    pineapple = serializers.IntegerField()
+    potatoes = serializers.IntegerField()
+    dumplings = serializers.IntegerField()
+    cabbage = serializers.IntegerField()
+    tomatoes = serializers.IntegerField()
