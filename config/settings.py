@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'apps.suggest.apps.SuggestConfig',
-    'apps.meals.apps.MealsConfig'
+    'apps.meals.apps.MealsConfig',
+    'apps.history.apps.HistoryConfig'
 ]
 
 MIDDLEWARE = [
