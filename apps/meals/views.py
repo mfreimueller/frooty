@@ -49,11 +49,7 @@ class MealUpdateDeleteView(APIView):
         try:
             update_meal(meal_id, meal)
         except Exception as e:
-            # either the ID was invalid or the meal wasn't found
-            if hasattr(e, 'message'):
-                return Response({ 'error': e }, status=400)
-            else:
-                return Response({ 'error': 'Invalid request.' }, status=400)
+            return Response({ 'error': e }, status=400)
 
         return Response({}, status=200)
 
