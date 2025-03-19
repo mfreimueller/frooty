@@ -1,11 +1,7 @@
-from apps.predictor.services import predict_meals
+from apps.suggest_logic.services import predict_meals
 from .models import Meal, MealSerialize
 from django.db import transaction
 import logging
-
-def plan_meals():
-    predicted_meals = predict_meals()
-    return predicted_meals
 
 def get_all_meals():
     all_meals = Meal.objects.all()
