@@ -33,6 +33,20 @@ def add_meals(meals):
     
     return created_meals
 
+def delete_meal(meal_id):
+    logger = logging.getLogger(__name__)
+
+    logger.debug(f"Deleting meal with id {meal_id}...")#
+
+    try:
+        meal_object = Meal.objects.get(id=meal_id)
+    except Exception as e:
+        logger.error(f"No meal with id {meal_id} found!")
+        raise Exception(f"No meal with id {meal_id} found!")
+    
+    meal_object.delete()
+
+
 def update_meal(meal_id, meal):
     logger = logging.getLogger(__name__)
 

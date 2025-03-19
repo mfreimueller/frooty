@@ -1,9 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .services import add_meals, get_all_meals, update_meal
+from .services import add_meals, delete_meal, get_all_meals, update_meal
 
 class MealListCreateView(APIView):
     """
+    GET /api/meals
+
     An API endpoint that returns all meal entries of the
     internal data storage.
     """
@@ -12,6 +14,8 @@ class MealListCreateView(APIView):
         return Response({ "history": all_meals })
 
     """
+    POST /api/meals
+
     An API endpoint that creates new meal entries in
     the internal data storage to use for further predictions.
     The meal entries are appended to the storage and are
@@ -53,5 +57,15 @@ class MealUpdateDeleteView(APIView):
 
         return Response({}, status=200)
 
+    """
+    DELETE /api/meals/{meal_id}
+
+    An API endpoint that deletes the meal with the given id.
+    """
     def delete(self, request, meal_id):
-        pass
+        try:
+            delete_meal(meal_id)
+        except Exception as e:
+            return Response({ 'error': e }, status=400)
+        
+        return Response({}, status=200)
