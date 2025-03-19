@@ -2,7 +2,7 @@ from django.db import models
 from rest_framework import serializers
 
 class Meal(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     complexity = models.PositiveSmallIntegerField()
     soup  = models.PositiveSmallIntegerField(default=0)
     takeaway = models.PositiveSmallIntegerField(default=0)
