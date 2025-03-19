@@ -1,16 +1,23 @@
 from .models import Meal, MealSerialize
+from django.db import IntegrityError, transaction
 import logging
 
 def get_all_meals():
     all_meals = Meal.objects.all()
     return MealSerialize(all_meals, many=True).data
 
+@transaction.atomic
 def add_meal(meal):
     logger = logging.getLogger(__name__)
 
     logger.debug(f"Adding meal {meal['name']}...")
-    meal_object = Meal.objects.create(**meal)
-    meal_object.save()
+
+    try:
+        meal_object = Meal.objects.create(**meal)
+        meal_object.save()
+    except IntegrityError as e:
+        logger.error(f"Failed to create meal with name '{meal['name']}': Meal already exists!")
+        raise Exception(f"Failed to create meal with name '{meal['name']}': Meal already exists!")
 
     return MealSerialize(meal_object).data
 
