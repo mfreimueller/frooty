@@ -30,6 +30,9 @@ class MealServiceTestCase(TestCase):
         meal = add_meal({ "name": "Toast", "complexity": 2 })
         self.assertEqual(meal['name'], "Toast")
 
+    def test_add_duplicated_meal(self):
+        self.assertRaises(Exception, add_meal, { "name": "Brotjause", "complexity": 2 })
+
     def test_get_all_meals(self):
         meals = get_all_meals()
         self.assertEqual(len(meals), len(self.meals))
