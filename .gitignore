@@ -1,4 +1,4 @@
-tensorflow/
+penv/
 __pycache__
 .vscode/
 test_data/
