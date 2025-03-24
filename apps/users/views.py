@@ -1,8 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .services import add_user_to_group, authenticate_user, create_new_group, logout_user, register_user, remove_user_from_group, update_user_password
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_not_required
 
+@login_not_required
 @api_view(['POST'])
 def register(request):
     data = request.data
@@ -21,6 +22,7 @@ def register(request):
 
     return Response({ 'success': True })
 
+@login_not_required
 @api_view(['POST'])
 def authenticate(request):
     data = request.data
@@ -43,7 +45,6 @@ def logout(request):
     else:
         return Response({ 'error': 'Failed to log user out.' }, status=400)
 
-@login_required
 @api_view(['PUT'])
 def update_password(request):
     data = request.data
@@ -56,7 +57,6 @@ def update_password(request):
     update_user_password(user, password)
     return Response({ 'success': True })
 
-@login_required
 @api_view(['POST'])
 def create_group(request):
     data = request.data
@@ -69,7 +69,6 @@ def create_group(request):
     group = create_new_group(user, group_name)
     return Response({ 'group': group })
 
-@login_required
 @api_view(['POST'])
 def add_to_group(request):
     data = request.data
@@ -87,7 +86,6 @@ def add_to_group(request):
     
     return Response({ 'success': True })
 
-@login_required
 @api_view(['DELETE'])
 def remove_from_group(request):
     data = request.data
