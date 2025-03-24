@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .utils import str_to_snake_case
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 from .models import Family
 from .services import FamilyService
 from apps.users.services import register_user
