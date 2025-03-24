@@ -1,8 +1,6 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from .services import FamilyService
-from django.contrib.auth.decorators import login_required
 
 class FamilyListCreateView(APIView):
     """
@@ -36,7 +34,7 @@ class FamilyUpdateDeleteView(APIView):
     
     Updates the user visible family name.
     """
-    def put(self, request, family_id):
+    def put(self, request, family_id: int):
         user = request.user
         data = request.data
 
@@ -55,7 +53,7 @@ class FamilyUpdateDeleteView(APIView):
     DELETE /api/families/{family_id}
 
     An API endpoint that deletes the family with the given id iff the
-    logged in user is its owner. TODO !!!
+    logged in user is its owner.
     """
     def delete(self, request, family_id):
         user = request.user
@@ -67,39 +65,33 @@ class FamilyUpdateDeleteView(APIView):
         
         return Response({}, status=200)
 
-
-@login_required
-@api_view(['POST'])
-def add_to_group(request):
-    data = request.data
-    user = request.user
-
-    group_name = data.get('name')
-    user_name = data.get('user')
-    if not all([ group_name, user_name ]):
-        return Response({ 'error': 'Requires names of user and group.' }, status=400)
+class FamilyUserModifyView(APIView):
+    """
+    PUT /api/families/{family_id}/{user_name}
     
-    try:
-        add_user_to_group(user, group_name, user_name)
-    except Exception as e:
-        return Response({ 'error': e }, status=400)
-    
-    return Response({ 'success': True })
+    Adds a user to the group.
+    """
+    def put(self, request, family_id: int, user_name: str):
+        user = request.user
 
-@login_required
-@api_view(['DELETE'])
-def remove_from_group(request):
-    data = request.data
-    user = request.user
+        try:
+            FamilyService().add_user(user, family_id, user_name)
+        except Exception as e:
+            return Response({ 'error': e }, status=400)
 
-    group_name = data.get('name')
-    user_name = data.get('user')
-    if not all([ group_name, user_name ]):
-        return Response({ 'error': 'Requires names of user and group.' }, status=400)
-    
-    try:
-        remove_user_from_group(user, group_name, user_name)
-    except Exception as e:
-        return Response({ 'error': e }, status=400)
-    
-    return Response({ 'success': True })
+        return Response({}, status=200)
+
+    """
+    DELETE /api/families/{family_id}/{user_name}
+
+    Removes an user from the the group.
+    """
+    def delete(self, request, family_id, user_name: str):
+        user = request.user
+
+        try:
+            FamilyService().remove_user(user, family_id, user_name)
+        except Exception as e:
+            return Response({ 'error': e }, status=400)
+        
+        return Response({}, status=200)

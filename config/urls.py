@@ -22,5 +22,6 @@ urlpatterns = [
     path('api/suggest/', include('apps.suggest.urls')),
     path('api/meals/', include('apps.meals.urls')),
     path('api/history/', include('apps.history.urls')),
-    path('api/users/', include('apps.users.urls'))
+    path('api/users/', include('apps.users.urls')),
+    path('api/families/', include('apps.families.urls'))
 ]
