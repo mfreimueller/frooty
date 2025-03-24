@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'apps.suggest.apps.SuggestConfig',
     'apps.meals.apps.MealsConfig',
     'apps.history.apps.HistoryConfig',
-    'apps.users.apps.UserConfig'
+    'apps.users.apps.UserConfig',
+    'apps.families.apps.FamilyConfig'
 ]
 
 MIDDLEWARE = [
