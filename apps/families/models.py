@@ -18,6 +18,9 @@ class Family(Group):
     
     def user_is_owner(self, user: User):
         return user.owned_families.filter(id=self.id).exists()
+    
+    def is_user_part(self, user: User):
+        return user.groups.filter(id=self.id).exists()
 
 class FamilySerialize(serializers.Serializer):
     id = serializers.IntegerField()

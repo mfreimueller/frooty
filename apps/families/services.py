@@ -60,6 +60,9 @@ class FamilyService:
 
         return FamilySerialize(families, many=True).data
     
+    def is_user_part_of_family(self, user: User, family_id: int) -> bool:
+        return user.groups.filter(id=family_id).exists()
+
     def _get_family_if_owner(self, user: User, family_id: int) -> Family:
         family = Family.objects.filter(id=family_id).first()
 
