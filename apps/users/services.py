@@ -14,10 +14,12 @@ def register_user(username, email, password):
         logger.debug(f'Successfully created new user with name {username}')
 
         user_group_name = f'{user.username}_group'
-        FamilyService().create_group(user, user_group_name, True)
+        FamilyService().create_family(user, user_group_name, True)
     except Exception as e:
         logger.exception(e)
         raise e
+    
+    return user
 
 def authenticate_user(request, username, password):
     logger = logging.getLogger(__name__)
