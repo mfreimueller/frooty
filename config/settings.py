@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'apps.suggest.apps.SuggestConfig',
     'apps.meals.apps.MealsConfig',
-    'apps.history.apps.HistoryConfig'
+    'apps.history.apps.HistoryConfig',
+    'apps.users.apps.UserConfig'
 ]
 
 MIDDLEWARE = [
