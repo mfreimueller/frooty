@@ -97,9 +97,9 @@ class UsersServiceTestCase(TestCase):
 
     def test_that_removal_from_groups_without_membership_fails(self):
         # as user[1] is not part of families[0], this should fail
-        self.assertRaises(Exception, FamilyService().remove_user, self.users[1], self.families[0].id, self.users[0].username)
+        self.assertRaises(Exception, FamilyService().remove_user, self.users[1], self.families[0]['id'], self.users[0].username)
 
     def test_that_removal_of_users_without_membership_from_groups_fails(self):
-        self.assertRaises(Exception, FamilyService().remove_user, self.users[0], self.families[0].id, self.users[1].username)
+        self.assertRaises(Exception, FamilyService().remove_user, self.users[0], self.families[0]['id'], self.users[1].username)
 
 
