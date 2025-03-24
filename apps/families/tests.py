@@ -22,10 +22,8 @@ class UsersServiceTestCase(TestCase):
             register_user(username='test2', password='pass123', email='test@te-st.com'),
         ]
 
-        family = Family.objects.create(name='my_family', family_name='My Family')
-        self.users[0].groups.add(family)
         self.families = [
-            family
+            FamilyService().create_family(self.users[0], 'My Family')
         ]
 
     """
@@ -35,7 +33,7 @@ class UsersServiceTestCase(TestCase):
     def tearDown(self):
         all_families = Family.objects.all()
         for family in all_families:
-            found = [ f for f in self.families if f.id == family.id ]
+            found = [ f for f in self.families if f['id'] == family.id ]
             if len(found) == 0:
                 family.delete()
 
@@ -67,10 +65,31 @@ class UsersServiceTestCase(TestCase):
         service = FamilyService()
         dict = service.create_family(user, group_name)
 
-        service.remove_user(user, dict['id'], user)
+        service.delete_group(user, dict['id'])
 
-        self.assertFalse(Group.objects.filter(name=dict['name']).exists())
-        self.assertFalse(Family.objects.filter(family_name=dict['family_name']).exists())
+        self.assertFalse(Group.objects.filter(id=dict['id']).exists())
+        self.assertFalse(Family.objects.filter(id=dict['id']).exists())
+
+    def test_that_deletion_of_group_fails_for_non_owner(self):
+        user = self.users[0]
+        group_name = 'New Group!'
+
+        service = FamilyService()
+        dict = service.create_family(user, group_name)
+
+        self.assertRaises(Exception, service.delete_group, self.users[1], dict['id'])
+
+    def test_removal_from_group(self):
+        user = self.users[0]
+        user_to_remove = self.users[1]
+        family = self.families[0]
+
+        service = FamilyService()
+        service.add_user(user, family['id'], user_to_remove.username)
+
+        service.remove_user(user, family['id'], user_to_remove.username)
+
+        self.assertIsNone(user_to_remove.groups.filter(id=family['id']).first())
 
     def test_that_removal_from_nonexisting_groups_fails(self):
         user = self.users[0]
@@ -82,3 +101,5 @@ class UsersServiceTestCase(TestCase):
 
     def test_that_removal_of_users_without_membership_from_groups_fails(self):
         self.assertRaises(Exception, FamilyService().remove_user, self.users[0], self.families[0].id, self.users[1].username)
+
+

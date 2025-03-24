@@ -5,6 +5,7 @@ from rest_framework import serializers
 class Family(Group):
     family_name = models.CharField(max_length=200, unique=True)
     personal = models.BooleanField(default=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_families')
 
     objects = models.Manager()
 
@@ -14,6 +15,9 @@ class Family(Group):
 
     def __unicode__(self):
         return self.name
+    
+    def user_is_owner(self, user: User):
+        return user.owned_families.filter(id=self.id).exists()
 
 class FamilySerialize(serializers.Serializer):
     id = serializers.IntegerField()
