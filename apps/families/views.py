@@ -11,8 +11,8 @@ class FamilyListCreateView(APIView):
     def get(self, request):
         user = request.user
 
-        all_groups = FamilyService().get_all_of_user(user)
-        return Response({ "groups": all_groups })
+        all_families = FamilyService().get_all_of_user(user)
+        return Response({ "families": all_families })
     
     """
     POST /api/families
