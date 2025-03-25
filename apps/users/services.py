@@ -25,7 +25,7 @@ def authenticate_user(request, username, password):
     logger = logging.getLogger(__name__)
     logger.debug(f'Attempting to authenticate user with name {username}')
 
-    user = authenticate(request, username=username, passowrd=password)
+    user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
         return True
