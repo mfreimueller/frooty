@@ -1,8 +1,13 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .services import FamilyService
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import authentication
 
 class FamilyListCreateView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     """
     GET /api/families
 
@@ -29,6 +34,9 @@ class FamilyListCreateView(APIView):
         return Response({ 'family': family })
 
 class FamilyUpdateDeleteView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     """
     PUT /api/families/{family_id}
     
@@ -66,6 +74,9 @@ class FamilyUpdateDeleteView(APIView):
         return Response({}, status=200)
 
 class FamilyUserModifyView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     """
     PUT /api/families/{family_id}/{user_name}
     

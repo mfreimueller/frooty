@@ -1,8 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .services import add_meal, delete_meal, get_all_meals, update_meal
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import authentication
 
 class MealListCreateView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     """
     GET /api/meals
 
@@ -32,6 +37,9 @@ class MealListCreateView(APIView):
         return Response({ 'meal': created_meal })
 
 class MealUpdateDeleteView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     """
     PUT /api/meals/{meal_id}
 

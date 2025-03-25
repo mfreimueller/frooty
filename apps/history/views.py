@@ -1,8 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .services import HistoryService
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import authentication
 
 class HistoryListCreateView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     """
     GET /api/history
 
@@ -50,6 +55,9 @@ class HistoryListCreateView(APIView):
         return Response({ 'history': history_of_family })
 
 class HistoryUpdateDeleteView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     """
     PUT /api/history/{history_id}
 
