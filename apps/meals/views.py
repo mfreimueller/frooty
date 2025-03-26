@@ -16,7 +16,7 @@ class MealListCreateView(APIView):
     """
     def get(self, request):
         all_meals = get_all_meals()
-        return Response({ "history": all_meals })
+        return Response({ "meals": all_meals })
 
     """
     POST /api/meals
