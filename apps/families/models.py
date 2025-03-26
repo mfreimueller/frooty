@@ -22,8 +22,9 @@ class Family(Group):
     def is_user_part(self, user: User):
         return user.groups.filter(id=self.id).exists()
 
-class FamilySerialize(serializers.Serializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField(max_length=150)
-    family_name = serializers.CharField(max_length=200)
-    personal = serializers.BooleanField()
+class FamilySerialize(serializers.ModelSerializer):
+    familyName = serializers.CharField(source='family_name')
+
+    class Meta:
+        model = Family
+        fields = ['id', 'name', 'familyName', 'personal']
