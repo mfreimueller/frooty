@@ -25,7 +25,7 @@ class Predictor:
 
             predicted_meals = self._label_encoder.inverse_transform(top_2_indices.flatten())[:2]
 
-            meals.append(predicted_meals[:2])
+            meals.append(predicted_meals[0]) # TODO: implement alternatives
 
             meal_feature = self._data.get_features(predicted_meals[0])
             self._data.append(meal_feature)
