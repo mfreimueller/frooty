@@ -18,7 +18,7 @@ class HistoryListCreateView(APIView):
         user = request.user
         data = request.data
 
-        family_id = data.get('family_id')
+        family_id = request.query_params['family_id']
         if family_id is None:
             return Response({ 'error': 'family_id is required.' }, status=400)
         
