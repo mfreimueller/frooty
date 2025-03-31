@@ -14,7 +14,7 @@ class HistoryService:
             logger.error(f'User {user.id} attempted to access family {family_id}!')
             raise Exception(f'User is not part of family {family_id}')
 
-        history_of_family = History.objects.filter(family_id=family_id).all()
+        history_of_family = History.objects.filter(family_id=family_id).order_by('-date').all()
         return HistorySerialize(history_of_family, many=True).data
 
     @transaction.atomic
