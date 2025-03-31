@@ -16,7 +16,6 @@ class HistoryListCreateView(APIView):
     """
     def get(self, request):
         user = request.user
-        data = request.data
 
         family_id = request.query_params['family_id']
         if family_id is None:
@@ -41,18 +40,17 @@ class HistoryListCreateView(APIView):
         user = request.user
         data = request.data
 
-        family_id = data.get('family_id')
         history = data.get('history')
 
-        if not all([ family_id, history ]):
-            return Response({ 'error': '`family_id` and `history` are required.' }, status=400)
+        if history is None:
+            return Response({ 'error': '`history` is required.' }, status=400)
         
         try:
-            history_of_family = HistoryService().add_history(user, history, family_id)
+            historyItems = HistoryService().add_history(user, history)
         except Exception as e:
-            return Response({ 'error': e }, status=400)
+            return Response({ 'error': repr(e) }, status=400)
 
-        return Response({ 'history': history_of_family })
+        return Response({ 'history': historyItems })
 
 class HistoryUpdateDeleteView(APIView):
     authentication_classes = [authentication.TokenAuthentication]

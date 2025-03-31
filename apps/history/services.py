@@ -18,18 +18,26 @@ class HistoryService:
         return HistorySerialize(history_of_family, many=True).data
 
     @transaction.atomic
-    def add_history(self, user: User, history: list, family_id: int):
+    def add_history(self, user: User, history: list):
         logger = logging.getLogger(__name__)
 
-        if not FamilyService().is_user_part_of_family(user, family_id):
-            logger.error(f'User {user.id} attempted to access family {family_id}!')
-            raise Exception(f'User is not part of family {family_id}')
+        # perform quick permission check for all provided families
+        family_ids = {
+            item['familyId']
+            for item in history
+        }
+
+        for family_id in family_ids:
+            if not FamilyService().is_user_part_of_family(user, family_id):
+                logger.error(f'User {user.id} attempted to access family {family_id}!')
+                raise Exception(f'User is not part of family {family_id}')
 
         created_history_items = []
 
         for item in history:
             meal = item['meal']
             date_str = item['date']
+            family_id = item['familyId']
 
             date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
 
