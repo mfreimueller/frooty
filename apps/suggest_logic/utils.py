@@ -42,8 +42,8 @@ class SetupHelper:
     def __init__(self, source):
         self._source = source
     
-    def create_data(self):
-        df = self._source.create_data_frame()
+    def create_data(self, family_id):
+        df = self._source.create_data_frame(family_id)
         shape, values, labels = self._prepare_data(df)
 
         onehot_encoder = OneHotEncoder(sparse_output=False)
