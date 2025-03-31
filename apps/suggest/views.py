@@ -22,7 +22,7 @@ class SuggestView(APIView):
         start_date_str = data.get('startDate')
 
         if not all([ family_id, start_date_str ]):
-            return Response({ 'error': '`family_id` and `start_date` are required.' }, status=400)
+            return Response({ 'error': '`familyId` and `startDate` are required.' }, status=400)
 
 
         start_date = datetime.datetime.strptime(start_date_str, "%Y-%m-%d").date()
