@@ -17,7 +17,7 @@ class Predictor:
         meals = []
 
         for _ in range(7):
-            sequence = self._data.last(7)
+            sequence = self._data.last(365)
 
             predictions = self._data.model.predict([sequence])
             top_2 = tf.nn.top_k(predictions, k=2)
