@@ -42,13 +42,13 @@ class HistoryListCreateView(APIView):
         data = request.data
 
         family_id = data.get('family_id')
-        meals = data.get('meals')
+        history = data.get('history')
 
-        if not all([ family_id, meals ]):
-            return Response({ 'error': '`family_id` and `meals` are required.' }, status=400)
+        if not all([ family_id, history ]):
+            return Response({ 'error': '`family_id` and `history` are required.' }, status=400)
         
         try:
-            history_of_family = HistoryService().add_history(user, meals, family_id)
+            history_of_family = HistoryService().add_history(user, history, family_id)
         except Exception as e:
             return Response({ 'error': e }, status=400)
 

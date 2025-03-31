@@ -3,6 +3,7 @@ from django.db import transaction
 import logging
 from django.contrib.auth.models import User
 from apps.families.services import FamilyService
+import datetime
 
 class HistoryService:
 
@@ -17,7 +18,7 @@ class HistoryService:
         return HistorySerialize(history_of_family, many=True).data
 
     @transaction.atomic
-    def add_history(self, user: User, meals: list[str], family_id: int):
+    def add_history(self, user: User, history: list, family_id: int):
         logger = logging.getLogger(__name__)
 
         if not FamilyService().is_user_part_of_family(user, family_id):
@@ -26,9 +27,15 @@ class HistoryService:
 
         created_history_items = []
 
-        for meal in meals:
-            logger.debug(f"Adding history {meal}...")
-            history_object = History.objects.create(meal=meal, family_id=family_id)
+        for item in history:
+            meal = item['meal']
+            date_str = item['date']
+
+            date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+
+            logger.debug(f"Adding history for {date}: {meal}")
+
+            history_object = History.objects.create(meal=meal, date=date, family_id=family_id)
             history_object.save()
 
             created_history_items.append(history_object)
