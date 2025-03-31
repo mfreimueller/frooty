@@ -21,4 +21,7 @@ def plan_meals(user: User, family_id: int, start_date: datetime.date):
 
         date = date + datetime.timedelta(days=1)
 
+    # we need to reverse the list as currently the first day of
+    # the week is stored last
+    return_list.reverse()
     return return_list
