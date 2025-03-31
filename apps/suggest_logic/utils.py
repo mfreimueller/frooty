@@ -3,6 +3,7 @@ import numpy as np
 import keras
 from sklearn.preprocessing import OneHotEncoder
 import tensorflow as tf
+import os.path
 
 class Predictor:
     def __init__(self, data, label_encoder):
@@ -46,14 +47,27 @@ class SetupHelper:
         df = self._source.create_data_frame(family_id)
         shape, values, labels = self._prepare_data(df)
 
-        onehot_encoder = OneHotEncoder(sparse_output=False)
-        labels_encoded = onehot_encoder.fit_transform(labels.reshape(-1, 1))
+        # create hash from df and test for stored model
+        file_path = f"./store/{family_id}_{len(values)}.keras"
 
-        print("One-Hot-kodierte Mahlzeiten:")
-        print(labels_encoded)
+        model = None
+        if os.path.isfile(file_path):
+            try:
+                model = keras.saving.load_model(file_path)
+            except Exception as ex:
+                pass
+        
+        if model is None:
+            onehot_encoder = OneHotEncoder(sparse_output=False)
+            labels_encoded = onehot_encoder.fit_transform(labels.reshape(-1, 1))
 
-        n_classes = labels_encoded.shape[1]
-        model = self._create_model(shape, n_classes, values, labels_encoded)
+            print("One-Hot-kodierte Mahlzeiten:")
+            print(labels_encoded)
+
+            n_classes = labels_encoded.shape[1]
+            model = self._create_model(shape, n_classes, values, labels_encoded)
+
+            model.save(file_path, overwrite=True)
 
         return Data(df, values, model)
 
@@ -68,6 +82,7 @@ class SetupHelper:
         model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
 
         model.fit(values, labels_encoded, epochs=50, batch_size=4)
+
         return model
     
     def _prepare_data(self, df):
@@ -86,4 +101,3 @@ class SetupHelper:
         labels = np.array(labels)
 
         return raw_values.shape, values, labels
-    
