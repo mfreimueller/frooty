@@ -5,14 +5,14 @@ class Config:
     def load_config(path: str):
         with open(path, 'r') as file:
             rawConfig = json.load(file)
-            
+
             protocol = rawConfig['protocol'] or 'tcp:'
-            address = rawConfig['address'] or 'localhost'
+            interface = rawConfig['interface'] or 'localhost'
             port = rawConfig['port'] or 5555
 
-            return Config(protocol, address, port)
+            return Config(protocol, interface, port)
 
-    def __init__(self, protocol: str, address: str, port: int):
+    def __init__(self, protocol: str, interface: str, port: int):
         self.protocol = protocol
-        self.address = address
+        self.interface = interface
         self.port = port

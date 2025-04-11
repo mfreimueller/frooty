@@ -20,7 +20,7 @@ config = Config.load_config(config_path)
 ctx = Context.instance()
 
 socket = ctx.socket(zmq.REP)
-socket.bind(f"{config.protocol}://{config.address}:{config.port}")
+socket.bind(f"{config.protocol}://{config.interface}:{config.port}")
 
 while True:
     request = socket.recv_json()
